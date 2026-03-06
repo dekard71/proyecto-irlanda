@@ -1,0 +1,9 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    { "type": "Feature", "properties": { "tipo": "puerto", "nombre": "Cobh" }, "geometry": { "type": "Point", "coordinates": [-8.29, 51.85] } },
+    { "type": "Feature", "properties": { "tipo": "puerto", "nombre": "Dublin" }, "geometry": { "type": "Point", "coordinates": [-6.26, 53.34] } },
+    { "type": "Feature", "properties": { "tipo": "destino", "nombre": "New York" }, "geometry": { "type": "Point", "coordinates": [-74.00, 40.71] } },
+    { "type": "Feature", "properties": { "tipo": "ruta", "periodo": "1845" }, "geometry": { "type": "LineString", "coordinates": [[-8.29, 51.85], [-74.00, 40.71]] } }
+  ]
+}

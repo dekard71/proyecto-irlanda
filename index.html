@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset='utf-8' />
+    <title>Rutas del Hambre - Diáspora Irlandesa</title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.css' rel='stylesheet' />
+    
+    <script src="https://unpkg.com/intersection-observer@0.5.1/intersection-observer.js"></script>
+    <script src="https://unpkg.com/scrollama"></script>
+    
+    <style>
+        body { margin: 0; padding: 0; font-family: 'Georgia', serif; }
+        #map { position: fixed; top: 0; bottom: 0; width: 100%; z-index: -1; }
+        
+        /* Estilo de los bloques de texto */
+        #story {
+            padding: 0 5vw;
+        }
+        .step {
+            width: 35%;
+            margin-bottom: 70vh; /* Espacio entre capítulos */
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 5px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.2);
+            line-height: 1.6;
+            opacity: 0.1;
+            transition: opacity 0.5s;
+        }
+        .step.active {
+            opacity: 1;
+        }
+        .step:last-child {
+            margin-bottom: 30vh;
+        }
+        
+        /* Ajuste para pantallas móviles */
+        @media (max-width: 750px) {
+            .step { width: 85%; margin-left: auto; margin-right: auto; }
+        }
+
+        /* Alineación según config.js */
+        .lefty { margin-left: 5%; }
+        .righty { margin-left: 55%; }
+        .fully { margin: auto; width: 80%; }
+        
+        h1, h2 { color: #2c3e50; }
+    </style>
+</head>
+<body>
+
+<div id="map"></div>
+<div id="story"></div>
+
+<script src="./config.js"></script>
+
+<script>
+    // Inicialización del mapa
+    mapboxgl.accessToken = config.accessToken;
+
+    const map = new mapboxgl.Map({
+        container: 'map',
+        style: config.style,
+        center: config.chapters[0].location.center,
+        zoom: config.chapters[0].location.zoom,
+        pitch: config.chapters[0].location.pitch,
+        bearing: config.chapters[0].location.bearing,
+        interactive: false // Desactivamos interacción manual para no romper el relato
+    });
+
+    // Crear las cajas de texto dinámicamente desde config.js
+    const story = document.getElementById('story');
+    config.chapters.forEach((record, idx) => {
+        const container = document.createElement('div');
+        const chapter = document.createElement('div');
+        
+        if (record.title) {
+            const title = document.createElement('h2');
+            title.innerText = record.title;
+            chapter.appendChild(title);
+        }
+        
+        if (record.description) {
+            const storyText = document.createElement('p');
+            storyText.innerHTML = record.description;
+            chapter.appendChild(storyText);
+        }
+
+        container.setAttribute('id', record.id);
+        container.classList.add('step');
+        if (idx === 0) container.classList.add('active');
+        
+        // Asignar alineación
+        const alignment = record.alignment || 'left';
+        if (alignment === 'left') container.classList.add('lefty');
+        else if (alignment === 'right') container.classList.add('righty');
+        else if (alignment === 'full') container.classList.add('fully');
+
+        container.appendChild(chapter);
+        story.appendChild(container);
+    });
+
+    // Configurar Scrollama para detectar el desplazamiento
+    const scroller = scrollama();
+
+    map.on('load', function() {
+        scroller
+            .setup({
+                step: '.step',
+                offset: 0.5,
+                progress: true
+            })
+            .onStepEnter(response => {
+                const chapter = config.chapters.find(chap => chap.id === response.element.id);
+                response.element.classList.add('active');
+                
+                // Mover la cámara del mapa
+                map.flyTo(chapter.location);
+                
+                // Cambiar opacidad de capas si existen instrucciones
+                if (chapter.onChapterEnter) {
+                    chapter.onChapterEnter.forEach(setLayerOpacity);
+                }
+            })
+            .onStepExit(response => {
+                const chapter = config.chapters.find(chap => chap.id === response.element.id);
+                response.element.classList.remove('active');
+                
+                if (chapter.onChapterExit) {
+                    chapter.onChapterExit.forEach(setLayerOpacity);
+                }
+            });
+    });
+
+    function setLayerOpacity(layer) {
+        map.setPaintProperty(layer.layer, 'line-opacity', layer.opacity);
+        map.setPaintProperty(layer.layer, 'circle-opacity', layer.opacity);
+        map.setPaintProperty(layer.layer, 'fill-opacity', layer.opacity);
+    }
+
+    // Ajustar el mapa al cambiar el tamaño de ventana
+    window.addEventListener('resize', scroller.resize);
+</script>
+
+</body>
+</html>
