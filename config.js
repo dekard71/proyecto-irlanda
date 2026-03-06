@@ -1,5 +1,5 @@
 var config = {
-    style: 'mapbox://styles/dekard1971/cmmf7qkdf00ae01ra3tdo7u5m', // Reemplaza con tu Style ID
+    style: 'mapbox://styles/dekard1971/cmmfauj4o00ah01ra1d3g7bip', // Reemplaza con tu Style ID
     accessToken: 'pk.eyJ1IjoiZGVrYXJkMTk3MSIsImEiOiJjbWtueDJ5bmUwMGNhM2Vxcjl4ZmN4NjNtIn0.DkFTZA4If8bk9utRIelG1g',
     showMarkers: false,
     theme: 'dark', // O 'light' según tu diseño
