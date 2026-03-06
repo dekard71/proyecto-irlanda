@@ -1,9 +1,550 @@
 {
   "type": "FeatureCollection",
   "features": [
-    { "type": "Feature", "properties": { "tipo": "puerto", "nombre": "Cobh" }, "geometry": { "type": "Point", "coordinates": [-8.29, 51.85] } },
-    { "type": "Feature", "properties": { "tipo": "puerto", "nombre": "Dublin" }, "geometry": { "type": "Point", "coordinates": [-6.26, 53.34] } },
-    { "type": "Feature", "properties": { "tipo": "destino", "nombre": "New York" }, "geometry": { "type": "Point", "coordinates": [-74.00, 40.71] } },
-    { "type": "Feature", "properties": { "tipo": "ruta", "periodo": "1845" }, "geometry": { "type": "LineString", "coordinates": [[-8.29, 51.85], [-74.00, 40.71]] } }
+    {
+      "type": "Feature",
+      "properties": {
+        "tipo": "puerto",
+        "nombre": "Cobh (Cork)",
+        "pais": "Irlanda"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -8.29,
+          51.85
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "tipo": "puerto",
+        "nombre": "Dublín",
+        "pais": "Irlanda"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.26,
+          53.34
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "tipo": "puerto",
+        "nombre": "Limerick",
+        "pais": "Irlanda"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -8.63,
+          52.66
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "tipo": "ciudad_destino",
+        "nombre": "Liverpool",
+        "pais": "Reino Unido"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -2.99,
+          53.41
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "tipo": "ciudad_destino",
+        "nombre": "Londres",
+        "pais": "Reino Unido"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.12,
+          51.51
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "tipo": "ciudad_destino",
+        "nombre": "Nueva York",
+        "pais": "EE.UU."
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.0,
+          40.71
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "tipo": "ciudad_destino",
+        "nombre": "Boston",
+        "pais": "EE.UU."
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -71.06,
+          42.36
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "tipo": "ciudad_destino",
+        "nombre": "Quebec",
+        "pais": "Canadá"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -71.21,
+          46.81
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "tipo": "ciudad_destino",
+        "nombre": "Melbourne",
+        "pais": "Australia"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          144.96,
+          -37.81
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "tipo": "ruta",
+        "periodo": "1845_1852",
+        "origen": "Cobh",
+        "destino": "Liverpool"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -8.29,
+            51.85
+          ],
+          [
+            -2.99,
+            53.41
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "tipo": "ruta",
+        "periodo": "1845_1852",
+        "origen": "Cobh",
+        "destino": "Nueva York"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -8.29,
+            51.85
+          ],
+          [
+            -20,
+            48
+          ],
+          [
+            -74.0,
+            40.71
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "tipo": "ruta",
+        "periodo": "1845_1852",
+        "origen": "Dublín",
+        "destino": "Liverpool"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -6.26,
+            53.34
+          ],
+          [
+            -2.99,
+            53.41
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "tipo": "ruta",
+        "periodo": "1845_1852",
+        "origen": "Dublín",
+        "destino": "Nueva York"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -6.26,
+            53.34
+          ],
+          [
+            -20,
+            50
+          ],
+          [
+            -74.0,
+            40.71
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "tipo": "ruta",
+        "periodo": "1845_1852",
+        "origen": "Limerick",
+        "destino": "Quebec"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -8.63,
+            52.66
+          ],
+          [
+            -25,
+            52
+          ],
+          [
+            -45,
+            50
+          ],
+          [
+            -71.21,
+            46.81
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "tipo": "ruta",
+        "periodo": "1845_1852",
+        "origen": "Cobh",
+        "destino": "Quebec"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -8.29,
+            51.85
+          ],
+          [
+            -25,
+            52
+          ],
+          [
+            -45,
+            50
+          ],
+          [
+            -71.21,
+            46.81
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "tipo": "ruta",
+        "periodo": "1852_1870",
+        "origen": "Liverpool",
+        "destino": "Nueva York"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -2.99,
+            53.41
+          ],
+          [
+            -20,
+            48
+          ],
+          [
+            -74.0,
+            40.71
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "tipo": "ruta",
+        "periodo": "1852_1870",
+        "origen": "Liverpool",
+        "destino": "Boston"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -2.99,
+            53.41
+          ],
+          [
+            -20,
+            50
+          ],
+          [
+            -71.06,
+            42.36
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "tipo": "ruta",
+        "periodo": "1852_1870",
+        "origen": "Dublín",
+        "destino": "Boston"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -6.26,
+            53.34
+          ],
+          [
+            -20,
+            51
+          ],
+          [
+            -71.06,
+            42.36
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "tipo": "ruta",
+        "periodo": "1852_1870",
+        "origen": "Liverpool",
+        "destino": "Quebec"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -2.99,
+            53.41
+          ],
+          [
+            -30,
+            52
+          ],
+          [
+            -71.21,
+            46.81
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "tipo": "ruta",
+        "periodo": "1852_1870",
+        "origen": "Cobh",
+        "destino": "Londres"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -8.29,
+            51.85
+          ],
+          [
+            -0.12,
+            51.51
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "tipo": "ruta",
+        "periodo": "1870_1900",
+        "origen": "Liverpool",
+        "destino": "Melbourne"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -2.99,
+            53.41
+          ],
+          [
+            0,
+            40
+          ],
+          [
+            20,
+            20
+          ],
+          [
+            50,
+            -10
+          ],
+          [
+            100,
+            -30
+          ],
+          [
+            144.96,
+            -37.81
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "tipo": "ruta",
+        "periodo": "1870_1900",
+        "origen": "Cobh",
+        "destino": "Melbourne"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -8.29,
+            51.85
+          ],
+          [
+            0,
+            40
+          ],
+          [
+            20,
+            15
+          ],
+          [
+            50,
+            -10
+          ],
+          [
+            100,
+            -30
+          ],
+          [
+            144.96,
+            -37.81
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "tipo": "ruta",
+        "periodo": "1870_1900",
+        "origen": "Dublín",
+        "destino": "Nueva York"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -6.26,
+            53.34
+          ],
+          [
+            -25,
+            50
+          ],
+          [
+            -74.0,
+            40.71
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "tipo": "ruta",
+        "periodo": "1870_1900",
+        "origen": "Cobh",
+        "destino": "Boston"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -8.29,
+            51.85
+          ],
+          [
+            -25,
+            48
+          ],
+          [
+            -71.06,
+            42.36
+          ]
+        ]
+      }
+    }
   ]
 }

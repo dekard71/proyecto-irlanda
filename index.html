@@ -4,50 +4,56 @@
     <meta charset='utf-8' />
     <title>Rutas del Hambre - Diáspora Irlandesa</title>
     <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
-    
+
     <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.js'></script>
     <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.css' rel='stylesheet' />
-    
+
     <script src="https://unpkg.com/intersection-observer@0.5.1/intersection-observer.js"></script>
     <script src="https://unpkg.com/scrollama"></script>
-    
+
     <style>
         body { margin: 0; padding: 0; font-family: 'Georgia', serif; }
         #map { position: fixed; top: 0; bottom: 0; width: 100%; z-index: -1; }
-        
-        /* Estilo de los bloques de texto */
-        #story {
-            padding: 0 5vw;
-        }
+
+        #story { padding: 0 5vw; }
+
         .step {
             width: 35%;
-            margin-bottom: 70vh; /* Espacio entre capítulos */
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 5px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.2);
-            line-height: 1.6;
-            opacity: 0.1;
-            transition: opacity 0.5s;
+            margin-bottom: 70vh;
+            padding: 24px 28px;
+            background: rgba(15, 20, 30, 0.88);
+            border-radius: 6px;
+            border-left: 3px solid #c0392b;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+            line-height: 1.7;
+            color: #e8e0d5;
+            opacity: 0.15;
+            transition: opacity 0.5s ease;
         }
-        .step.active {
-            opacity: 1;
+        .step.active { opacity: 1; }
+        .step:first-child { margin-top: 15vh; }
+        .step:last-child  { margin-bottom: 30vh; }
+
+        .step h2 {
+            color: #e8a87c;
+            font-size: 1.1em;
+            margin-top: 0;
+            margin-bottom: 12px;
+            font-variant: small-caps;
+            letter-spacing: 0.04em;
         }
-        .step:last-child {
-            margin-bottom: 30vh;
+        .step p {
+            margin: 0;
+            font-size: 0.95em;
         }
-        
-        /* Ajuste para pantallas móviles */
+
         @media (max-width: 750px) {
             .step { width: 85%; margin-left: auto; margin-right: auto; }
         }
 
-        /* Alineación según config.js */
-        .lefty { margin-left: 5%; }
+        .lefty  { margin-left: 5%; }
         .righty { margin-left: 55%; }
-        .fully { margin: auto; width: 80%; }
-        
-        h1, h2 { color: #2c3e50; }
+        .fully  { margin: 0 auto; width: 60%; }
     </style>
 </head>
 <body>
@@ -58,91 +64,192 @@
 <script src="./config.js"></script>
 
 <script>
-    // Inicialización del mapa
+    // ── Construir bloques de texto desde config.js ────────────────────────────
+    const story = document.getElementById('story');
+    config.chapters.forEach((record, idx) => {
+        const container = document.createElement('div');
+        container.setAttribute('id', record.id);
+        container.classList.add('step');
+        if (idx === 0) container.classList.add('active');
+
+        const alignment = record.alignment || 'left';
+        if      (alignment === 'left')  container.classList.add('lefty');
+        else if (alignment === 'right') container.classList.add('righty');
+        else if (alignment === 'full')  container.classList.add('fully');
+
+        if (record.title) {
+            const title = document.createElement('h2');
+            title.innerText = record.title;
+            container.appendChild(title);
+        }
+        if (record.description) {
+            const p = document.createElement('p');
+            p.innerHTML = record.description;
+            container.appendChild(p);
+        }
+
+        story.appendChild(container);
+    });
+
+    // ── Inicializar mapa ──────────────────────────────────────────────────────
     mapboxgl.accessToken = config.accessToken;
 
     const map = new mapboxgl.Map({
         container: 'map',
         style: config.style,
         center: config.chapters[0].location.center,
-        zoom: config.chapters[0].location.zoom,
-        pitch: config.chapters[0].location.pitch,
+        zoom:   config.chapters[0].location.zoom,
+        pitch:  config.chapters[0].location.pitch,
         bearing: config.chapters[0].location.bearing,
-        interactive: false // Desactivamos interacción manual para no romper el relato
+        interactive: false
     });
 
-    // Crear las cajas de texto dinámicamente desde config.js
-    const story = document.getElementById('story');
-    config.chapters.forEach((record, idx) => {
-        const container = document.createElement('div');
-        const chapter = document.createElement('div');
-        
-        if (record.title) {
-            const title = document.createElement('h2');
-            title.innerText = record.title;
-            chapter.appendChild(title);
-        }
-        
-        if (record.description) {
-            const storyText = document.createElement('p');
-            storyText.innerHTML = record.description;
-            chapter.appendChild(storyText);
-        }
+    // ── Cargar fuente y capas tras el estilo ──────────────────────────────────
+    map.on('load', function () {
 
-        container.setAttribute('id', record.id);
-        container.classList.add('step');
-        if (idx === 0) container.classList.add('active');
-        
-        // Asignar alineación
-        const alignment = record.alignment || 'left';
-        if (alignment === 'left') container.classList.add('lefty');
-        else if (alignment === 'right') container.classList.add('righty');
-        else if (alignment === 'full') container.classList.add('fully');
+        map.addSource('datos', {
+            type: 'geojson',
+            data: './datos.geojson'
+        });
 
-        container.appendChild(chapter);
-        story.appendChild(container);
-    });
+        // Puertos de salida – círculos rojos
+        map.addLayer({
+            id: 'puertos-salida',
+            type: 'circle',
+            source: 'datos',
+            filter: ['==', ['get', 'tipo'], 'puerto'],
+            paint: {
+                'circle-radius': 8,
+                'circle-color': '#c0392b',
+                'circle-stroke-width': 2,
+                'circle-stroke-color': '#ffffff',
+                'circle-opacity': 0
+            }
+        });
 
-    // Configurar Scrollama para detectar el desplazamiento
-    const scroller = scrollama();
+        // Ciudades de destino – círculos azules
+        map.addLayer({
+            id: 'ciudades-destino',
+            type: 'circle',
+            source: 'datos',
+            filter: ['==', ['get', 'tipo'], 'ciudad_destino'],
+            paint: {
+                'circle-radius': 7,
+                'circle-color': '#2980b9',
+                'circle-stroke-width': 2,
+                'circle-stroke-color': '#ffffff',
+                'circle-opacity': 0
+            }
+        });
 
-    map.on('load', function() {
+        // Rutas 1845–1852 – naranja intenso
+        map.addLayer({
+            id: 'rutas-1845-1852',
+            type: 'line',
+            source: 'datos',
+            filter: ['==', ['get', 'periodo'], '1845_1852'],
+            paint: {
+                'line-color': '#e67e22',
+                'line-width': 2,
+                'line-dasharray': [3, 2],
+                'line-opacity': 0
+            }
+        });
+
+        // Rutas 1852–1870 – amarillo cálido
+        map.addLayer({
+            id: 'rutas-1852-1870',
+            type: 'line',
+            source: 'datos',
+            filter: ['==', ['get', 'periodo'], '1852_1870'],
+            paint: {
+                'line-color': '#f1c40f',
+                'line-width': 2,
+                'line-dasharray': [3, 2],
+                'line-opacity': 0
+            }
+        });
+
+        // Rutas 1870–1900 – morado / expansión global
+        map.addLayer({
+            id: 'rutas-1870-1900',
+            type: 'line',
+            source: 'datos',
+            filter: ['==', ['get', 'periodo'], '1870_1900'],
+            paint: {
+                'line-color': '#9b59b6',
+                'line-width': 2,
+                'line-dasharray': [3, 2],
+                'line-opacity': 0
+            }
+        });
+
+        // ── Etiquetas de nombres ──────────────────────────────────────────────
+        map.addLayer({
+            id: 'etiquetas-puntos',
+            type: 'symbol',
+            source: 'datos',
+            filter: ['in', ['get', 'tipo'], ['literal', ['puerto', 'ciudad_destino']]],
+            layout: {
+                'text-field': ['get', 'nombre'],
+                'text-font': ['Open Sans Semibold', 'Arial Unicode MS Bold'],
+                'text-size': 11,
+                'text-offset': [0, 1.2],
+                'text-anchor': 'top'
+            },
+            paint: {
+                'text-color': '#ffffff',
+                'text-halo-color': '#000000',
+                'text-halo-width': 1,
+                'text-opacity': 0
+            }
+        });
+
+        // ── Scrollama ─────────────────────────────────────────────────────────
+        const scroller = scrollama();
         scroller
-            .setup({
-                step: '.step',
-                offset: 0.5,
-                progress: true
-            })
+            .setup({ step: '.step', offset: 0.5, progress: true })
             .onStepEnter(response => {
-                const chapter = config.chapters.find(chap => chap.id === response.element.id);
+                const chapter = config.chapters.find(c => c.id === response.element.id);
                 response.element.classList.add('active');
-                
-                // Mover la cámara del mapa
-                map.flyTo(chapter.location);
-                
-                // Cambiar opacidad de capas si existen instrucciones
+                map.flyTo({ ...chapter.location, essential: true });
+
                 if (chapter.onChapterEnter) {
                     chapter.onChapterEnter.forEach(setLayerOpacity);
+                    // Mostrar etiquetas cuando haya puntos visibles
+                    const hasPuntos = chapter.onChapterEnter.some(
+                        l => (l.layer === 'puertos-salida' || l.layer === 'ciudades-destino') && l.opacity > 0
+                    );
+                    map.setPaintProperty('etiquetas-puntos', 'text-opacity', hasPuntos ? 1 : 0);
                 }
             })
             .onStepExit(response => {
-                const chapter = config.chapters.find(chap => chap.id === response.element.id);
+                const chapter = config.chapters.find(c => c.id === response.element.id);
                 response.element.classList.remove('active');
-                
                 if (chapter.onChapterExit) {
                     chapter.onChapterExit.forEach(setLayerOpacity);
                 }
             });
+
+        window.addEventListener('resize', scroller.resize);
     });
 
-    function setLayerOpacity(layer) {
-        map.setPaintProperty(layer.layer, 'line-opacity', layer.opacity);
-        map.setPaintProperty(layer.layer, 'circle-opacity', layer.opacity);
-        map.setPaintProperty(layer.layer, 'fill-opacity', layer.opacity);
-    }
+    // ── setLayerOpacity: aplica la propiedad correcta según el tipo de capa ──
+    function setLayerOpacity(layerConfig) {
+        if (!map.getLayer(layerConfig.layer)) return;
 
-    // Ajustar el mapa al cambiar el tamaño de ventana
-    window.addEventListener('resize', scroller.resize);
+        const type = map.getLayer(layerConfig.layer).type;
+        const propMap = {
+            'circle': 'circle-opacity',
+            'line':   'line-opacity',
+            'fill':   'fill-opacity',
+            'symbol': 'icon-opacity'
+        };
+        const prop = propMap[type];
+        if (prop) {
+            map.setPaintProperty(layerConfig.layer, prop, layerConfig.opacity);
+        }
+    }
 </script>
 
 </body>
